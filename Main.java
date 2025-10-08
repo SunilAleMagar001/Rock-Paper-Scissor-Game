@@ -1,91 +1,96 @@
 import java.util.Scanner;
 
-class Main {
+class Game {
 
-    // Returns either "rock", "paper" or "scissors"
-    String getComputerChoice() {
+    Scanner input; 
 
-        String computerChoice;
+    // constructor receives the Scanner from main
+    Game(Scanner input) {
+        this.input = input;
+    }
+
+    String getComputerPick() {
+
+        String computerPick;
+        // get an integer from 1 to 3
         int randomNumber = (int) (Math.random() * 3) + 1;
 
         if (randomNumber == 1) {
-            computerChoice = "rock";
+            computerPick = "rock";
+        } else if (randomNumber == 2) {
+            computerPick = "paper";
+        } else {
+            computerPick = "scissors";
         }
 
-        else if (randomNumber == 2) {
-            computerChoice = "paper";
-        }
-
-        else {
-            computerChoice = "scissors";
-        }
-
-        return computerChoice;
+        return computerPick;
     }
 
-    // Returns user input
-    String getUserInput() {
+    String getUserPick() {
 
-        Scanner input = new Scanner(System.in);
+        String userPick;
 
-        System.out.println("Enter rock, paper or scissors:");
-        String userInput = input.nextLine();
-
-        userInput = userInput.toLowerCase();
-
-        return userInput;
-    }
-
-    // Return either "win", "lose" or "draw"
-    String getResult(String userInput, String computerChoice) {
-
-        // Condition for user to draw
-        if (userInput.equals(computerChoice)) {
-            return "draw";
-        }
-
-        // Condition for user to win
-        else if (userInput.equals("paper") && computerChoice.equals("rock")) {
-            return "win";
-        } 
-        
-        else if (userInput.equals("rock") && computerChoice.equals("scissors")) {
-            return "win";
-        }
-        
-        else if (userInput.equals("scissors") && computerChoice.equals("paper")) {
-            return "win";
-        }
-        
-        // All other conditions result to loss
-        else {
-            return "lose";
-        }
-    }
-
-    public static void main(String[] args) {
-
-        // Creating object of Main class
-        Main obj = new Main();
-
-        // Get user input
-        String userInput;
-        while(true) {
-            userInput = obj.getUserInput();
-
-            if (userInput.equals("rock") || userInput.equals("paper") || userInput.equals("scissors")) {
+        // get input until user enters "rock", "paper" or "scissors"
+        while (true) {
+            System.out.println("Enter rock, paper or scissors:");
+            userPick = input.nextLine().toLowerCase();
+            if (userPick.equals("rock") || userPick.equals("paper") || userPick.equals("scissors")) {
                 break;
             }
         }
 
-        // Get computers choice
-        String computerChoice = obj.getComputerChoice();
+        return userPick;
+    }
 
-        // Get results
-        String result = obj.getResult(userInput, computerChoice);
+    // return either "win", "lose" or "draw"
+    String getResult(String userPick, String computerPick) {
 
-        System.out.println("User Input: " + userInput);
-        System.out.println("Computer Choice: " + computerChoice);
-        System.out.println(result);
+        // condition for user to draw
+        if (userPick.equals(computerPick)) {
+            return "draw";
+        }
+
+        // condition for user to win
+        else if (userPick.equals("paper") && computerPick.equals("rock")) {
+            return "win";
+        } else if (userPick.equals("rock") && computerPick.equals("scissors")) {
+            return "win";
+        } else if (userPick.equals("scissors") && computerPick.equals("paper")) {
+            return "win";
+        }
+
+        // all conditions result in loss
+        else {
+            return "lose";
+        }
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        Game game = new Game(input); // pass same scanner to Game
+
+        while (true) {
+
+            String userPick = game.getUserPick();
+            String computerPick = game.getComputerPick();
+            String result = game.getResult(userPick, computerPick);
+
+            System.out.println("User Pick: " + userPick);
+            System.out.println("Computer Pick: " + computerPick);
+            System.out.println("You " + result);
+
+            System.out.println("Do you want to play again? (y/n): ");
+            String playAgain = input.nextLine().toLowerCase();
+
+            // if user enters any other character other than y, the game ends
+            if (!(playAgain.equals("y"))) {
+                break;
+            }
+        }
+
+        input.close();
     }
 }
